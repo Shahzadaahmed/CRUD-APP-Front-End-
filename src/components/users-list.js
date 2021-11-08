@@ -106,18 +106,17 @@ const UsersList = () => {
 
     // Note: Function to delete user...!
     const deleteUser = async (data, key) => {
-        // console.log(data, key);
+        console.log(data, key);
 
-        let api = `http://localhost:3001/user/${key}`;
+        let api = `http://localhost:3001/user/delete`;
 
         try {
-            let response = await axios.delete(api);
-            // let response = axios({
-            //     method: 'DELETE',
-            //     url: `http://localhost:3001/user/1`,
-            //     headers: { 'Content-Type': 'application/json' },
-            // });
-            console.log(response);
+            let response = await axios.post(api, {
+                email: data.email
+            });
+            if (response.status === 200) {
+                setUsersList([...response.data]);
+            }
         }
 
         catch (error) {
