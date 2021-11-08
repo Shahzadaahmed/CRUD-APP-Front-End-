@@ -65,7 +65,8 @@ const UsersList = () => {
 
     // Note: Function to fetch users from an API...!
     const fetchUsers = async () => {
-        let api = "http://localhost:3001/users";
+        // let api = "http://localhost:3001/users";
+        let api = "https://crud-app-back-end.herokuapp.com/users"
 
         try {
             let response = await axios.get(api);
@@ -108,7 +109,8 @@ const UsersList = () => {
     const deleteUser = async (data, key) => {
         console.log(data, key);
 
-        let api = `http://localhost:3001/user/delete`;
+        // let api = `http://localhost:3001/user/delete`;
+        let api = "https://crud-app-back-end.herokuapp.com/user/delete";
 
         try {
             let response = await axios.post(api, {
