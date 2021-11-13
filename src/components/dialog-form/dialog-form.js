@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
+import swal from 'sweetalert';
 
 // Note: Importing required API's of Material UI...!
 import Button from '@mui/material/Button';
@@ -9,6 +10,7 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 
@@ -22,9 +24,9 @@ const FormDialog = (props) => {
     let { dialogStatus, close, updatingStatus } = props;
 
     // Note: Handeling states here...!
-    const [name, setName] = useState((props.user != null) ? (props.user.name) : (""));
-    const [email, setEmail] = useState((props.user != null) ? (props.user.email) : (""));
-    const [password, setPassword] = useState((props.user != null) ? (props.user.password) : (""));
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     // Note: Function to clear form...!
     const clearForm = () => {
@@ -42,11 +44,10 @@ const FormDialog = (props) => {
     // Note: Function to update user data...!
     const updateUser = async () => {
         let userObj = {
-            name,
-            email,
-            password
+            name: (name === "") ? (props.user.name) : (name),
+            email: (email === "") ? (props.user.email) : (email),
+            password: (password === "") ? (props.user.password) : (password)
         }
-
         console.log(userObj);
 
         let api = "http://localhost:3001/user/update";
@@ -60,6 +61,13 @@ const FormDialog = (props) => {
 
             if (response.status === 200) {
                 updatingStatus(response);
+
+                swal({
+                    title: "User Updated",
+                    text: `The user with the email id ${props.user.email} has been updated successfully!`,
+                    icon: "success",
+                    button: "Ok!",
+                });
             }
         }
 
@@ -81,6 +89,19 @@ const FormDialog = (props) => {
                     </DialogTitle>
 
                     <DialogContent dividers>
+                        {
+                            (props.user != null)
+                                ?
+                                (
+                                    <DialogContentText>
+                                        Previous Data: <br />
+                                        <b>Name: </b> {props.user.name}. <b>Email: </b> {props.user.email}. <b>Password: </b> {props.user.password}.
+                                    </DialogContentText>
+                                )
+                                :
+                                (null)
+                        }
+
                         <TextField
                             margin="dense"
                             id="name"

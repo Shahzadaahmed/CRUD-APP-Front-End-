@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
+import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid';
 import FolderIcon from '@mui/icons-material/Folder';
@@ -122,8 +123,16 @@ const UsersList = () => {
             let response = await axios.post(api, {
                 email: data.email
             });
+            console.log(response);
+
             if (response.status === 200) {
                 setUsersList([...response.data]);
+                swal({
+                    title: "User Deleted",
+                    text: `The user with the email id ${data.email} has been deleted successfully!`,
+                    icon: "success",
+                    button: "Ok!",
+                });
             }
         }
 
@@ -136,7 +145,9 @@ const UsersList = () => {
     const editUser = (data, key) => {
         console.log(data, key);
         setUserData(data);
-        setOpenDialogForm(true);
+        setOpenDialogForm(true)
+
+        // setTimeout(() => setOpenDialogForm(true), 2000);
     }
 
     // Note: Function to close dialog form...!
@@ -153,6 +164,36 @@ const UsersList = () => {
     const userStatus = (response) => {
         console.log('Response recieved in users list screen: ', response);
         setUsersList([...response.data]);
+    }
+
+    // Note: Function to delete all users...!
+    const deleteAllUsers = async () => {
+
+        let api = "http://localhost:3001/user/deleteAll";
+
+        try {
+            let response = await axios({
+                method: "DELETE",
+                url: api,
+                headers: { 'Content-Type': 'application/json' }
+            });
+            console.log(response);
+
+            if (response.status === 200) {
+                setUsersList([...response.data]);
+
+                swal({
+                    title: "All Users Deleted",
+                    text: "All users has been deleted successfully!",
+                    icon: "success",
+                    button: "Ok!",
+                });
+            }
+        }
+
+        catch (error) {
+            console.log(error.response);
+        }
     }
 
     return (
@@ -172,6 +213,15 @@ const UsersList = () => {
                             <h1 className={classes.heading}>
                                 Users List!
                             </h1>
+
+                            <Button
+                                variant="contained"
+                                disableElevation
+                                style={{ marginBottom: 10, backgroundColor: "red" }}
+                                onClick={deleteAllUsers}
+                            >
+                                Delete All Users
+                            </Button>
 
                             <Grid item xs={12} md={6} className={classes.listContainer}>
                                 <List>
