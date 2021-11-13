@@ -133,8 +133,8 @@ const CreateUserScreen = () => {
         console.log(data, 'Form data recieved!');
         setIsButtonDisabled(true);
 
-        let api = "http://localhost:3001/user";
-        // let api = "https://crud-app-back-end.herokuapp.com/user";
+        // let api = "http://localhost:3001/user";
+        let api = "https://crud-app-back-end.herokuapp.com/user";
 
         try {
             let response = await axios.post(api, data);
